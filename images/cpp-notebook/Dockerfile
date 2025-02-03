@@ -23,18 +23,12 @@ RUN apt-get update --yes && \
 
 RUN update-alternatives --install /usr/bin/clang-repl clang-repl /usr/bin/clang-repl-18 100
 
+RUN mamba install --yes 'pip' && \
+    mamba clean --all -f -y
+
+RUN mamba run pip install --root-user-action=ignore 'clang-repl>=1.0.2'
+
 USER ${NB_UID}
-
-# iue: install custom kernel
-RUN mamba install --yes \
-    'pip' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-RUN mamba run pip install --user clang-repl  && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
 
 RUN clang-repl --version
 RUN jupyter kernelspec list
