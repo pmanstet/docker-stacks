@@ -26,7 +26,7 @@ RUN update-alternatives --install /usr/bin/clang-repl clang-repl /usr/bin/clang-
 RUN mamba install --yes 'pip' && \
     mamba clean --all -f -y
 
-RUN mamba run pip install --root-user-action=ignore 'clang-repl>=1.0.3'
+RUN mamba run pip install --root-user-action=ignore 'clang-repl>=1.0.4'
 
 USER ${NB_UID}
 
