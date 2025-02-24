@@ -36,17 +36,20 @@ RUN curl -fOL https://github.com/coder/code-server/releases/download/v$CODE_VERS
 RUN mamba run pip install --root-user-action=ignore 'jupyter-server-proxy'
 RUN mamba run pip install --root-user-action=ignore 'jupyter-vscode-proxy'
 
-USER ${NB_UID}
+RUN code-server \
+    --extensions-dir "/usr/lib/code-server/lib/vscode/extensions/" \
+    --install-extension ms-python.python \
+    --install-extension ms-toolsai.jupyter \
+    --install-extension llvm-vs-code-extensions.vscode-clangd \
+    --install-extension ms-vscode.cmake-tools 
 
 RUN code-server --version
+RUN code-server --list-extensions
 RUN clang-format --version
 RUN clangd --version
 RUN clang-repl --version
 RUN jupyter kernelspec list
 
-RUN code-server --install-extension ms-python.python
-RUN code-server --install-extension ms-toolsai.jupyter
-RUN code-server --install-extension llvm-vs-code-extensions.vscode-clangd
-RUN code-server --install-extension ms-vscode.cmake-tools
-
+USER ${NB_UID}
 WORKDIR "${HOME}"
+
